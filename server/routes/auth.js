@@ -21,9 +21,7 @@ passport.use(new GoogleStrategy({
     }
 
     try {
-
         let user = await User.findOne( { googleId: profile.id});
-
         if(user) {
             done(null, user);
         } else {
@@ -58,7 +56,7 @@ router.get('/login-failure', (req, res)=> {
 )
 
 // Destroy user session
-router.get('logout', (req, res) => {
+router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if(err) {
             console.log(err);
@@ -66,19 +64,19 @@ router.get('logout', (req, res) => {
         } else {
             res.redirect('/')
         }
-    })
+    });
 });
 
 // Persist user data after successful auth
 passport.serializeUser(function(user, done) {
     done(null, user.id);
-})
+});
 
 // Retrieve user data from session
 passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
+   User.findById(id, function(err, user) {
         done(err, user);
-    })
-})
+    });
+});
 
 module.exports = router;
